@@ -1,0 +1,4 @@
+bug : 
+
+1- triggers works finely in sql server but to see the affect of them
+in api showing query i should restart api .

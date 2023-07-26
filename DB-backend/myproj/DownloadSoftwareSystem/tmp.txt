@@ -1,0 +1,227 @@
+@csrf_protect
+def create_a_new_SoftWare(request):
+    if request.method == 'POST':
+        body = json.loads(request.body.decode('utf-8'))
+        new_id = body.get("id") 
+        new_name = body.get("field_name")
+        new_pname = body.get("producer_name")
+        new_explanation = body.get("explanation")
+        new_Price = body.get("price")
+        new_currency = body.get("currency")
+        new_capacity = body.get("capacity") 
+        new_pict = body.get("picture")
+        new_reldate = body.get("releasedate") 
+        new_opsys = body.get("operatingsystem")
+        new_version = body.get("field_version")
+        new_downum = body.get("downloadnumber")
+        new_cat1 = body.get("category1")
+        new_cat2 = body.get("category2")
+        new_totscore = body.get("totalscore")
+        try:
+            producer = Producer.objects.get(pk=body.get("producer_name"))
+        except Producer.DoesNotExist:
+             raise Http404("Producer does not exist")
+        new_software = Software(id=new_id,field_name=new_name,producer_name=producer.producer_uname,explanation=new_explanation,price = new_Price , currency = new_currency , capacity = new_capacity , picture=new_pict,releasedate=new_reldate,operatingsystem=new_opsys,field_version=new_version,downloadnumber=new_downum,category1=new_cat1,category2=new_cat2,totalscore=new_totscore)
+        new_software.save()
+        # tag.restaurants.add(new_restaurant)
+        # tag.save()
+        return HttpResponse(status=200)
+    else:
+        raise HttpResponseNotAllowed("Method is not supported")
+
+
+
+# api/get-all-softwares
+
+def get_all_softwares(request):
+    query_set = Software.objects.all()
+    data = serializers.serialize("json", query_set)
+    return HttpResponse(data)
+
+# api/get-software
+
+def get_software_by_id(request, software_id):
+    try:
+        query_set = Software.objects.filter(pk=software_id)
+    except Software.DoesNotExist:
+        raise Http404("Software does not exist")
+    data = serializers.serialize("json", query_set)
+    return HttpResponse(data)
+
+# api/id/delete-software  https://www.stackhawk.com/blog/django-csrf-protection-guide/
+
+@csrf_protect
+def delete_software_by_id(request ,software_id ): 
+    if request.method == 'DELETE':
+        try:
+            software = Software.objects.get(pk=software_id)
+        except Software.DoesNotExist:
+            raise Http404("Restaurant does not exist")
+        
+        software.delete()
+        return HttpResponse(status=200)
+    else:
+        raise HttpResponseNotAllowed("Method is not supported")
+
+
+@csrf_protect
+def update_software_by_id(request ,software_id ):
+    if request.method == 'PUT':
+        body = json.loads(request.body.decode('utf-8'))
+        # new_id = body.get("id")   id could not be updated 
+        new_name = body.get("field_name")
+        new_pname = body.get("producer_name")
+        new_explanation = body.get("explanation")
+        new_Price = body.get("price")
+        new_currency = body.get("currency")
+        new_capacity = body.get("capacity") 
+        new_pict = body.get("picture")
+        new_reldate = body.get("releasedate") 
+        new_opsys = body.get("operatingsystem")
+        new_version = body.get("field_version")
+        new_downum = body.get("downloadnumber")
+        new_cat1 = body.get("category1")
+        new_cat2 = body.get("category2")
+        new_totscore = body.get("totalscore")
+        try:
+            software = Software.objects.get(pk=software_id)
+        except Software.DoesNotExist:
+            raise Http404("Software does not exist")
+        software.field_name = new_name
+        software.producer_name = new_pname
+        software.explanation = new_explanation
+        software.price = new_Price
+        software.currency =  new_currency
+        software.capacity = new_capacity 
+        software.picture =  new_pict 
+        software.releasedate =  new_reldate 
+        software.operatingsystem =  new_opsys 
+        software.field_version =  new_version 
+        software.downloadnumber = new_downum 
+        software.category1 = new_cat1 
+        software.category2 =  new_cat2 
+        software.totalscore = new_totscore 
+        software.save()
+        # tag.restaurants.add(restaurant)
+        # tag.save()
+        return HttpResponse(status=200)
+    else:
+        raise HttpResponseNotAllowed("Method is not supported")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # # Create a new software
+    # def create(self, request, *args, **kwargs):
+    #     serializer = DeviceSerializer(data=request.data)    
+    #     if serializer.is_valid() :
+    #         # try:
+    #         #     producer = Producer.objects.get(pk= serializer.data.get("producer_name"))
+    #         # except producer.DoesNotExist:
+    #         #     raise Http404("Producer does not exist")
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    # # Retrieve a software by their software id
+    # def retrieve(self, request, *args, **kwargs):
+    #     id = kwargs.get('pk')
+    #     Device = Software.objects.filter(id=id).first()
+    #     if Device:
+    #         serializer = DeviceSerializer(Device)
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response({'message': 'Device not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+    # # Update a software by their id
+    # def update(self, request, *args, **kwargs):
+    #     id = kwargs.get('pk')
+    #     Device = Device.objects.filter(id=id).first()
+    #     if Device:
+    #         serializer = DeviceSerializer(Device, data=request.data)
+    #         if serializer.is_valid():
+    #             serializer.save()
+    #             return Response(serializer.data)
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     else:
+    #         return Response({'message': 'Device not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    # # Delete a user by their username
+    # def destroy(self, request, *args, **kwargs):
+    #     id = kwargs.get('pk')
+    #     Device = Device.objects.filter(id=id).first()
+    #     if Device:
+    #         Device.delete()
+    #         return Response({'message': 'Device deleted successfully'})
+    #     else:
+    #         return Response({'message': 'Device not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
+        # # Create a new software
+    # def create(self, request, *args, **kwargs):
+    #     serializer = SoftwareSerializer(data=request.data)    
+    #     if serializer.is_valid() :
+    #         # try:
+    #         #     producer = Producer.objects.get(pk= serializer.data.get("producer_name"))
+    #         # except producer.DoesNotExist:
+    #         #     raise Http404("Producer does not exist")
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    # # Retrieve a software by their software id
+    # def retrieve(self, request, *args, **kwargs):
+    #     id = kwargs.get('pk')
+    #     software = Software.objects.filter(id=id).first()
+    #     if software:
+    #         serializer = SoftwareSerializer(software)
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response({'message': 'Software not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+    # # Update a software by their id
+    # def update(self, request, *args, **kwargs):
+    #     id = kwargs.get('pk')
+    #     software = Software.objects.filter(id=id).first()
+    #     if software:
+    #         serializer = SoftwareSerializer(software, data=request.data)
+    #         if serializer.is_valid():
+    #             serializer.save()
+    #             return Response(serializer.data)
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     else:
+    #         return Response({'message': 'Software not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    # # Delete a user by their username
+    # def destroy(self, request, *args, **kwargs):
+    #     id = kwargs.get('pk')
+    #     software = Software.objects.filter(id=id).first()
+    #     if software:
+    #         software.delete()
+    #         return Response({'message': 'Software deleted successfully'})
+    #     else:
+    #         return Response({'message': 'Software not found'}, status=status.HTTP_404_NOT_FOUND)
+        
