@@ -101,7 +101,7 @@ CREATE TABLE REGULAR
 
 CREATE TABLE SOFTWARE
 (
-	ID                INT              NOT NULL,	
+	ID                INT              NOT NULL IDENTITY(1,1),	
 	_Name             VARCHAR(25)      NOT NULL,
 	Producer_Name     VARCHAR(25)      NOT NULL,
 	Explanation       VARCHAR(1000),
@@ -152,7 +152,7 @@ CREATE TABLE SOFTWARE
 
 CREATE TABLE Device
 (
-	ID                 INT           NOT NULL,
+	ID                 INT           NOT NULL IDENTITY(1,1),
 	Device_UName       VARCHAR(25)   NOT NULL,
 	EntryDate          DATE          NOT NULL,
 	Device_name		   VARCHAR(25)   NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE Device
 
 CREATE TABLE COMMENT
 (
-	ID               INT           NOT NULL,
+	ID               INT           NOT NULL IDENTITY(1,1),
 	UserName         VARCHAR(25)   NOT NULL,
 	SoftwareID       INT           NOT NULL,
 	Content          VARCHAR(250)  NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE COMMENT
 
 CREATE TABLE CRITICS_SUGGESTIONS
 (
-	ID            INT			  NOT NULL,
+	ID            INT			  NOT NULL IDENTITY(1,1),
 	Content       VARCHAR(1000)   NOT NULL,
 	Score         INT,
 	UserName      VARCHAR(25)     NOT NULL,
@@ -202,7 +202,7 @@ CREATE TABLE MARKED
 (
 	Regular_UName    VARCHAR(25)   NOT NULL,
 	SoftwareID       INT           NOT NULL,
-	
+	ID               INT           NOT NULL IDENTITY(1,1) ,
 	PRIMARY KEY(Regular_UName,SoftwareID),
 	FOREIGN KEY(Regular_UName) REFERENCES REGULAR(Regular_UName)
 		ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -216,7 +216,7 @@ CREATE TABLE BUY
 (
 	Regular_UName    VARCHAR(25)   NOT NULL,
 	SoftwareID       INT           NOT NULL,
-	
+	ID               INT           NOT NULL IDENTITY(1,1) ,
 	PRIMARY KEY(Regular_UName,SoftwareID),
 	FOREIGN KEY(Regular_UName) REFERENCES REGULAR(Regular_UName)
 		ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -230,7 +230,7 @@ CREATE TABLE DOWNLOADED
 (
 	Regular_UName    VARCHAR(25)   NOT NULL,
 	SoftwareID       INT           NOT NULL,
-	DownloadID       INT           NOT NULL,
+	ID       INT					NOT NULL IDENTITY(1,1),
 	
 	PRIMARY KEY(Regular_UName,SoftwareID,DownloadID),
 	FOREIGN KEY(Regular_UName) REFERENCES REGULAR(Regular_UName)
@@ -244,7 +244,7 @@ CREATE TABLE SCORE
 	ScoreValue		 INT           NOT NULL ,
 	Regular_UName    VARCHAR(25)   NOT NULL,
 	SoftwareID       INT           NOT NULL,
-	
+	ID       INT					NOT NULL IDENTITY(1,1),
 	PRIMARY KEY(Regular_UName,SoftwareID),
 	FOREIGN KEY(Regular_UName) REFERENCES REGULAR(Regular_UName)
 		ON DELETE NO ACTION ON UPDATE NO ACTION,
